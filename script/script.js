@@ -34,17 +34,21 @@ function generateGameBoard(cells){
             j=0;
         }
         //chanche of a bomb
-        if(perc(50)){
+        if(perc(10)){
             board.innerHTML+=`<div class="cell bomb"><div class="stdBgr"><p class="invisible">${i}</p></div></div>`;
+            // board.innerHTML+=`<div class="cell d-flex"><div class="stdBgr"></div><p class="left invisible">ciao</p><div class="center invisible d-flex"><p class="top">ciao</p><p class="bot">ciao</p></div><p class="right invisible">ciao</p></div>`;
             bombMap[t][j]="1";//populate matrix with mine
         }else{
-            board.innerHTML+=`<div class="cell"><div class="stdBgr"><p class="invisible">${i}</p></div></div>`;
+            // board.innerHTML+=`<div class="cell d-flex"><div class="stdBgr"><p class="invisible">${i}</p></div></div>`;
+            let top=0, bot=0, left=0, right=0;
+            board.innerHTML+=`<div class="cell d-flex"><div class="stdBgr"></div><p class="left invisible">ciao</p><div class="center invisible d-flex"><p class="top">ciao</p><p class="bot">ciao</p></div><p class="right invisible">ciao</p></div>`;
             bombMap[t][j]="0";//populate matrix with empty
         }
         j++;
     }
     console.log("board: "+bombMap);
-    console.log(bombMap[0][0]);
+    console.log(bombMap.length);
+    // for
 }
 document.getElementById("choice").addEventListener("change", function(event){
     let size=parseInt(document.getElementById("choice").value);
@@ -59,12 +63,17 @@ document.getElementById("choice").addEventListener("change", function(event){
 });
 //add the click eventlistener to the frame
 document.getElementById("gameFrame").addEventListener("click",function(event){
-    console.log(event);
-    event.target.classList.remove("stdBgr");
-    event.target.getElementsByClassName("invisible")[0].classList.remove("invisible");
-    console.log(event.target.classList);
+    clickedCell=event.target;
+    clickedCell.classList.remove("stdBgr");
+    clickedCell=event.target.parentElement;
+    // se è una cella senza bomba
+    if(clickedCell.getElementsByClassName("center")[0]!=undefined){
+        clickedCell.getElementsByClassName("center")[0].classList.remove("invisible");
+        clickedCell.getElementsByClassName("right")[0].classList.remove("invisible");
+        clickedCell.getElementsByClassName("left")[0].classList.remove("invisible");
+    }
     if(event.target.parentElement.classList.contains("bomb")){
-        alert("you lost!");
+        // alert("you lost!");
         document.getElementById("gameFrame").classList.add("underlay");
         document.getElementById("lost").classList.remove("underlay");
         document.getElementById("lost").classList.remove("invisible");

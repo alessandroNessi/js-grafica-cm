@@ -45,7 +45,30 @@ h1, main{
     border: 1px solid grey;
     width: var(--cellWidth);
     height: var(--cellWidth);
+    /* width: 300px; */
+    /* height: 300px; */
 }
+/*cells mine data align*/
+.center{
+    width: 50%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.top, .bot, .right, .left{
+    padding: 5px;
+}
+.left{
+    width: 25%;
+    text-align: start;
+    align-self:center;
+}
+.right{
+    width: 25%;
+    text-align: end;
+    align-self:center;
+}
+/*end data align*/
 .invisible{
     display: none;
 }
