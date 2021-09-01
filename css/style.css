@@ -19,9 +19,21 @@
     width: var(--cellWidth);
     height: var(--cellWidth);
 }
-.whiteBgr{
-    background-color: white;
+.invisible{
+    display: none;
+}
+.checkedBgr{
+    background-color: lightpink;
 }
 .stdBgr{
+    width: 100%;
+    height: 100%;
     background-color: antiquewhite;
+}
+.bomb{
+    background-image: url(../media/bomb.png);
+    background-size: 80%;
+    background-position-x: center;
+    background-position-y: center;
+    background-repeat: no-repeat;
 }
