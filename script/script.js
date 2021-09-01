@@ -1,3 +1,7 @@
+/**a function that toggle select visibility */
+function toggleSelect(){
+    document.getElementById("choice").parentElement.classList.toggle("invisible");
+}
 /**given a percentage return with the same probability true or false */
 function perc(x){
     if(Math.random()*100<x){
@@ -8,6 +12,7 @@ function perc(x){
 }
 /** funzione che dati il numero di celle crea una griglia con dimensione impostata dalle variabili css 
  */
+var bombMap=[];//global matrix with the position of the cells empty and mined
 function generateGameBoard(cells){
     var board=document.getElementById("gameFrame");
     var root = document.documentElement;
@@ -20,29 +25,39 @@ function generateGameBoard(cells){
     console.log(`the cell width is :${cellWidth}`);
     //write a var cellwidth in css that is set as sigle cell width
     root.style.setProperty("--cellWidth" , cellWidth);
-    for(var i=0;i<(cells*cells);i++){
+    let t=0,j=0;//var to cycle the matrix
+    bombMap[0]=[];
+    for(let i=0;i<(cells*cells);i++){
+        if(j==cells){
+            t++;
+            bombMap[t]=[];
+            j=0;
+        }
         //chanche of a bomb
-        if(perc(10)){
+        if(perc(50)){
             board.innerHTML+=`<div class="cell bomb"><div class="stdBgr"><p class="invisible">${i}</p></div></div>`;
+            bombMap[t][j]="1";//populate matrix with mine
         }else{
             board.innerHTML+=`<div class="cell"><div class="stdBgr"><p class="invisible">${i}</p></div></div>`;
+            bombMap[t][j]="0";//populate matrix with empty
         }
+        j++;
     }
+    console.log("board: "+bombMap);
+    console.log(bombMap[0][0]);
 }
 document.getElementById("choice").addEventListener("change", function(event){
     let size=parseInt(document.getElementById("choice").value);
     if(!isNaN(size)){
-        // alert(`choice ${size}`);
+        // i generate the board
         generateGameBoard(size);
-        document.getElementById("choice").parentElement.classList.add("invisible");
+        //toggle select off
+        toggleSelect();
     }else{
         alert("invalid choice");
     }
 });
-// var cells=prompt("inserire il numero di celle <=10: ");
-// if (cells<=10){
-//     generateGameBoard(cells);
-// }
+//add the click eventlistener to the frame
 document.getElementById("gameFrame").addEventListener("click",function(event){
     console.log(event);
     event.target.classList.remove("stdBgr");
@@ -50,5 +65,12 @@ document.getElementById("gameFrame").addEventListener("click",function(event){
     console.log(event.target.classList);
     if(event.target.parentElement.classList.contains("bomb")){
         alert("you lost!");
+        document.getElementById("gameFrame").classList.add("underlay");
+        document.getElementById("lost").classList.remove("underlay");
+        document.getElementById("lost").classList.remove("invisible");
+        document.getElementById("lost").classList.add("d-flex");
     }
+});
+document.getElementById("reload").addEventListener("click", function(){
+    location.reload();
 });

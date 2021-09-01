@@ -11,11 +11,35 @@
 h1, main{
     text-align: center;
 }
-#gameFrame{
+#parentFrame{
     width: var(--frameWidth);
     margin: auto;
+    position:relative;
+    display: flex;
+    justify-content: center;
+}
+#gameFrame{
+    width: var(--frameWidth);
+    position:absolute;
     display: flex;
     flex-wrap: wrap;
+    background-color: lightpink;
+}
+.d-flex{
+    display: flex;
+}
+#lost{
+    width: var(--frameWidth);
+    height: var(--frameWidth);
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+}
+#lost *{
+    transform: scale(5);
+}
+.underlay{
+    z-index: -1;
 }
 .cell{
     border: 1px solid grey;
@@ -24,6 +48,9 @@ h1, main{
 }
 .invisible{
     display: none;
+}
+.get_in_background{
+    position: relative;
 }
 .checkedBgr{
     background-color: lightpink;
