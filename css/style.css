@@ -8,6 +8,9 @@
     /* --cellWidth:""; */
     /*la cellwidth è facoltativa in quanto la genero da js*/
 }
+h1, main{
+    text-align: center;
+}
 #gameFrame{
     width: var(--frameWidth);
     margin: auto;
