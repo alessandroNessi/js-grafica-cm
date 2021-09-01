@@ -1,0 +1,27 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+:root{
+    --frameWidth: 800px;
+    /* --cellWidth:""; */
+    /*la cellwidth è facoltativa in quanto la genero da js*/
+}
+#gameFrame{
+    width: var(--frameWidth);
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+.cell{
+    border: 1px solid grey;
+    width: var(--cellWidth);
+    height: var(--cellWidth);
+}
+.whiteBgr{
+    background-color: white;
+}
+.stdBgr{
+    background-color: antiquewhite;
+}
