@@ -48,28 +48,10 @@ h1, main{
     width: var(--cellWidth);
     height: var(--cellWidth);
 }
-/*cells mine data align*/
-/* .center{
-    width: 50%;
-    height: 100%;
-    flex-direction: column;
-    justify-content: space-between;
-}
-.top, .bot, .right, .left{
-    padding: 5px;
-}
-.left{
-    width: 25%;
-    text-align: start;
-    align-self:center;
-}
-.right{
-    width: 25%;
-    text-align: end;
-    align-self:center;
-} */
+/*cells data align*/
 .radius{
-    justify-self: center;
+    width: 100%;
+    text-align: center;
     align-self: center;
     font-size: 30px;
 }
