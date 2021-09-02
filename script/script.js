@@ -110,39 +110,91 @@ function generateGameBoard(cells){
 var totalClick=0;//clicks counter
 var totalCells=0;//total matrix cells cout even obtain with bombmap.length^2
 var bombMap=[];//global matrix with the position of the cells empty and mined
+//eventilstener to the select to populate the table
 document.getElementById("choice").addEventListener("change", function(event){
     let size=parseInt(document.getElementById("choice").value);
-    if(!isNaN(size)){
-        // i generate the board
-        generateGameBoard(size);
-        //toggle select off
-        toggleSelect();
-    }else{
-        alert("invalid choice");
-    }
+    // i generate the board
+    generateGameBoard(size);
+    //toggle select off
+    toggleSelect();
 });
 //add the click eventlistener to the frame
 document.getElementById("gameFrame").addEventListener("mousedown",function(event){
     clickedCell=event.target;
-    console.log(clickedCell.getAttribute('value'));
-    let j=parseInt(clickedCell.getAttribute('value').split(",")[0]);
-    let i=parseInt(clickedCell.getAttribute('value').split(",")[1]);
-    clickedCell.classList.remove("stdBgr");
-    // se è una cella senza bomba
-    if(bombMap[j][i]==1){
-        clickedCell.classList.add("bomb");
-        gameOver("lost",totalClick);
+    let j=parseInt(clickedCell.getAttribute('value').split(",")[0]);//i save the position of the fake value [j] and-
+    let i=parseInt(clickedCell.getAttribute('value').split(",")[1]);//[i] in two var
+    clickedCell.classList.remove("stdBgr");//remove the grass bgr
+    if(bombMap[j][i]==1){//if the cell corispond to a bomb
+        clickedCell.classList.add("bomb");//adding bomb bgr
+        gameOver("lost",totalClick);//ending game
     }else{
-        if(clickedCell.getElementsByClassName("radius")[0].classList.contains("invisible")){
-            clickedCell.classList.add("checkedBgr");
-            clickedCell.getElementsByClassName("radius")[0].classList.remove("invisible");
-            totalClick++;
-            if(totalClick==totalCells-17){
-                gameOver("won",totalClick);
+        if(clickedCell.getElementsByClassName("radius")[0].classList.contains("invisible")){//if hasn't already clicked so it still have invisible on radius
+            clickedCell.classList.add("checkedBgr");//add dirt bgr
+            clickedCell.getElementsByClassName("radius")[0].classList.remove("invisible");//show the bombs in the radius
+            totalClick++;//incrementing the score
+            if(clickedCell.getElementsByClassName("radius")[0].innerHTML==""){
+                unlockFreeCells(j,i);
+            }
+            if(totalClick==totalCells-17){//if the score is total-17
+                gameOver("won",totalClick);//i won :)
             }
         }
     }
 });
+function unlockFreeCells(j,i){
+    let cells=Math.sqrt(totalCells);
+    if(j==0){
+        if(i==0){
+            checkAndUnlock(i+1);
+            checkAndUnlock(i+cells*(j+1));
+            checkAndUnlock(i+1+cells*(j+1));
+        }else if(i==cells-1){
+            checkAndUnlock(i-1);
+            checkAndUnlock(i+cells*(j+1));
+            checkAndUnlock(i-1+cells*(j+1));
+        }else{
+            checkAndUnlock(i-1);
+            checkAndUnlock(i+1);
+            checkAndUnlock(i+cells*(j+1));
+            checkAndUnlock(i-1+cells*(j+1));
+            checkAndUnlock(i+1+cells*(j+1));
+        }
+    }else if(j==cells-1){
+        if(i==0){
+            checkAndUnlock(i+cells*(j-1));
+            checkAndUnlock(i+1+cells*(j-1));
+            checkAndUnlock(i+1+cells*(j));
+        }else if(i==cells-1){
+            checkAndUnlock(i-1+cells*(j));
+            checkAndUnlock(i-1+cells*(j-1));
+            checkAndUnlock(i+cells*(j-1));
+        }else{
+            checkAndUnlock(i-1+cells*(j));
+            checkAndUnlock(i-1+cells*(j-1));
+            checkAndUnlock(i+cells*(j-1));
+            checkAndUnlock(i+1+cells*(j-1));
+            checkAndUnlock(i+1+cells*(j));
+        }
+    }
+}
+function checkAndUnlock(i){
+    console.log("i="+i);
+    if(document.getElementsByClassName("cell")[i].getElementsByClassName("radius")[0].classList.contains("invisible")){//if hasn't already clicked so it still have invisible on radius
+        let x=parseInt(document.getElementsByClassName("cell")[i].getAttribute('value').split(",")[0]);//i save the position of the fake value [j] and-
+        let y=parseInt(document.getElementsByClassName("cell")[i].getAttribute('value').split(",")[1]);//[i] in two var
+        document.getElementsByClassName("cell")[i].classList.remove("stdBgr");//remove the grass bgr
+        document.getElementsByClassName("cell")[i].classList.add("checkedBgr");//add dirt bgr
+        document.getElementsByClassName("cell")[i].getElementsByClassName("radius")[0].classList.remove("invisible");//show the bombs in the radius
+        totalClick++;//incrementing the score
+        if(document.getElementsByClassName("cell")[i].getElementsByClassName("radius")[0].innerHTML==""){
+            unlockFreeCells(x,y);
+        }
+        if(totalClick==totalCells-17){//if the score is total-17
+            gameOver("won",totalClick);//i won :)
+        }
+    }
+    // return;
+}
 document.getElementById("reload").addEventListener("click", function(){
-    location.reload();
+    location.reload();//refresh the page for a new begin
 });
