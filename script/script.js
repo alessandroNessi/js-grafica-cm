@@ -175,6 +175,27 @@ function unlockFreeCells(j,i){
             checkAndUnlock(i+1+cells*(j-1));
             checkAndUnlock(i+1+cells*(j));
         }
+    }else if(i==0){
+        checkAndUnlock(i+cells*(j-1));
+        checkAndUnlock(i+cells*(j+1));
+        checkAndUnlock(i+1+cells*(j-1));
+        checkAndUnlock(i+1+cells*(j+1));
+        checkAndUnlock(i+1+cells*(j));
+    }else if(i==cells-1){
+        checkAndUnlock(i+cells*(j-1));
+        checkAndUnlock(i+cells*(j+1));
+        checkAndUnlock(i-1+cells*(j-1));
+        checkAndUnlock(i-1+cells*(j+1));
+        checkAndUnlock(i-1+cells*(j));
+    }else{
+        checkAndUnlock(i+cells*(j-1));
+        checkAndUnlock(i+cells*(j+1));
+        checkAndUnlock(i-1+cells*(j-1));
+        checkAndUnlock(i-1+cells*(j+1));
+        checkAndUnlock(i-1+cells*(j));
+        checkAndUnlock(i+1+cells*(j-1));
+        checkAndUnlock(i+1+cells*(j+1));
+        checkAndUnlock(i+1+cells*(j));
     }
 }
 function checkAndUnlock(i){
