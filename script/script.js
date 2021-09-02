@@ -61,7 +61,7 @@ function generateGameBoard(cells){
         }
         //populate bombs array
         if(bombsArray.includes(i)){
-            board.innerHTML+=`<div class="cell bomb"><div class="stdBgr"><p class="invisible">${i}</p></div></div>`;
+            board.innerHTML+=`<div class="cell bomb"><div class="stdBgr"></div></div>`;
             bombMap[t][j]=1;//populate matrix with mine
         }else{
             board.innerHTML+=`<div class="cell d-flex"><div class="stdBgr"></div><p class="radius invisible"></p></div></div>`;
