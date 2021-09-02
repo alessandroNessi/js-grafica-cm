@@ -59,21 +59,19 @@ function generateGameBoard(cells){
             bombMap[t]=[];
             j=0;
         }
-        //populate bombs array
+        //populate bombs array adding a fake attribute value to the div where i save the corresponding position of the cell in the array
         if(bombsArray.includes(i)){
-            board.innerHTML+=`<div class="cell bomb"><div class="stdBgr"></div></div>`;
+            board.innerHTML+=`<div class="cell stdBgr" value="${t},${j}"></div>`;
             bombMap[t][j]=1;//populate matrix with mine
         }else{
-            board.innerHTML+=`<div class="cell d-flex"><div class="stdBgr"></div><p class="radius invisible"></p></div></div>`;
+            board.innerHTML+=`<div class="cell stdBgr d-flex" value="${t},${j}"><p class="radius invisible"></p></div>`;
             bombMap[t][j]=0;//populate matrix with empty
         }
         j++;
     }
-    // console.log("board: "+bombMap);
-    // console.log(bombMap.length);
     t=0;
     let sum = 0;
-    //populate the bombs around saved uin <p class="radius">
+    //populate the bombs around every cell saving the correspondi value inside <p class="radius">
     for(j=0;j<bombMap.length;j++){//*cycle rows */
         for(let i=0;i<bombMap.length;i++){/*cycle columns */
             if(bombMap[j][i]!=1){
@@ -93,9 +91,9 @@ function generateGameBoard(cells){
                     }else{
                         sum=bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j][i+1]+bombMap[j-1][i-1]+bombMap[j][i-1];
                     }
-                }else if(i==0){
+                }else if(i==0){//if it's the left border
                     sum=bombMap[j][i+1]+bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j+1][i]+bombMap[j+1][i+1];
-                }else if(i==bombMap.length-1){
+                }else if(i==bombMap.length-1){//if it's the right border
                     sum=bombMap[j-1][i-1]+bombMap[j][i-1]+bombMap[j+1][i-1]+bombMap[j+1][i]+bombMap[j-1][i];
                 }else{
                     sum=bombMap[j][i-1]+bombMap[j][i+1]+bombMap[j+1][i]+bombMap[j+1][i+1]+bombMap[j+1][i-1]+bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j-1][i-1];
@@ -126,22 +124,23 @@ document.getElementById("choice").addEventListener("change", function(event){
 //add the click eventlistener to the frame
 document.getElementById("gameFrame").addEventListener("mousedown",function(event){
     clickedCell=event.target;
+    console.log(clickedCell.getAttribute('value'));
+    let j=parseInt(clickedCell.getAttribute('value').split(",")[0]);
+    let i=parseInt(clickedCell.getAttribute('value').split(",")[1]);
     clickedCell.classList.remove("stdBgr");
-    clickedCell=event.target.parentElement;
-    clickedCell.classList.add("checkedBgr");
     // se è una cella senza bomba
-    if(clickedCell.getElementsByClassName("radius")[0]!=undefined){
+    if(bombMap[j][i]==1){
+        clickedCell.classList.add("bomb");
+        gameOver("lost",totalClick);
+    }else{
         if(clickedCell.getElementsByClassName("radius")[0].classList.contains("invisible")){
+            clickedCell.classList.add("checkedBgr");
             clickedCell.getElementsByClassName("radius")[0].classList.remove("invisible");
             totalClick++;
-            console.log(totalClick);
             if(totalClick==totalCells-17){
                 gameOver("won",totalClick);
             }
         }
-    }
-    if(event.target.parentElement.classList.contains("bomb")){
-        gameOver("lost",totalClick);
     }
 });
 document.getElementById("reload").addEventListener("click", function(){

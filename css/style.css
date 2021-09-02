@@ -72,17 +72,15 @@ h1, main{
     position: relative;
 }
 .checkedBgr{
-    /* background-color: lightpink; */
     background-image:url("../media/sand.jpg");
     background-size: cover;
 }
 .stdBgr{
-    width: 100%;
-    height: 100%;
     background-image:url("../media/grass.jpg");
     background-size: cover;
 }
 .bomb{
+    background-color: red;
     background-image: url(../media/bomb.png);
     background-size: 80%;
     background-position-x: center;
