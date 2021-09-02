@@ -28,15 +28,17 @@ h1, main{
 .d-flex{
     display: flex;
 }
-#lost{
+#gameOver{
     width: var(--frameWidth);
     height: var(--frameWidth);
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     position: absolute;
 }
-#lost *{
+#gameOver *{
     transform: scale(5);
+    margin: 50px;
 }
 .underlay{
     z-index: -1;
@@ -45,8 +47,6 @@ h1, main{
     border: 1px solid grey;
     width: var(--cellWidth);
     height: var(--cellWidth);
-    /* width: 300px; */
-    /* height: 300px; */
 }
 /*cells mine data align*/
 .center{

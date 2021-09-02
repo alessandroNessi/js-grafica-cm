@@ -10,6 +10,20 @@ function perc(x){
         return false;
     }
 }
+/**funzione che apre la pagina di vittoria o sconfitta e ritorna un numero */
+function gameOver(result,score){
+    document.getElementById("gameFrame").classList.add("underlay");
+    document.getElementById("gameOver").classList.remove("underlay");
+    document.getElementById("gameOver").classList.remove("invisible");
+    document.getElementById("gameOver").classList.add("d-flex");
+    if(result=="lost"){
+        document.getElementById("resultLabel").innerHTML="YOU LOST!";
+        document.getElementById("scoreLabel").innerHTML="SCORE: 0";
+    }else{
+        document.getElementById("resultLabel").innerHTML="YOU WON!";
+        document.getElementById("scoreLabel").innerHTML="SCORE: 100";
+    }
+}
 /** funzione che dati il numero di celle crea una griglia con dimensione impostata dalle variabili css 
  */
 var bombMap=[];//global matrix with the position of the cells empty and mined
@@ -37,18 +51,70 @@ function generateGameBoard(cells){
         if(perc(10)){
             board.innerHTML+=`<div class="cell bomb"><div class="stdBgr"><p class="invisible">${i}</p></div></div>`;
             // board.innerHTML+=`<div class="cell d-flex"><div class="stdBgr"></div><p class="left invisible">ciao</p><div class="center invisible d-flex"><p class="top">ciao</p><p class="bot">ciao</p></div><p class="right invisible">ciao</p></div>`;
-            bombMap[t][j]="1";//populate matrix with mine
+            bombMap[t][j]=1;//populate matrix with mine
         }else{
             // board.innerHTML+=`<div class="cell d-flex"><div class="stdBgr"><p class="invisible">${i}</p></div></div>`;
             let top=0, bot=0, left=0, right=0;
             board.innerHTML+=`<div class="cell d-flex"><div class="stdBgr"></div><p class="left invisible">ciao</p><div class="center invisible d-flex"><p class="top">ciao</p><p class="bot">ciao</p></div><p class="right invisible">ciao</p></div>`;
-            bombMap[t][j]="0";//populate matrix with empty
+            bombMap[t][j]=0;//populate matrix with empty
         }
         j++;
     }
     console.log("board: "+bombMap);
     console.log(bombMap.length);
-    // for
+    t=0;
+    let top=0, bot=0, left=0, right=0;
+    //populate the bombs around
+    for(j=0;j<bombMap.length;j++){//*cycle rows */
+        for(let i=0;i<bombMap.length;i++){/*cycle columns */
+            if(bombMap[j][i]!=1){
+                if(j==0){//if it's the starting row
+                    if(i==0){
+                        bot=bombMap[j+1][i]+bombMap[j+1][i+1];
+                        right=bombMap[j+1][i+1]+bombMap[j][i+1];
+                    }else if(i==bombMap.length-1){
+                        bot=bombMap[j+1][i]+bombMap[j+1][i-1];
+                        left=bombMap[j+1][i-1]+bombMap[j][i-1];
+                    }else{
+                        bot=bombMap[j+1][i]+bombMap[j+1][i+1]+bombMap[j+1][i-1];
+                        right=bombMap[j+1][i+1]+bombMap[j][i+1];
+                        left=bombMap[j+1][i-1]+bombMap[j][i-1];
+                    }
+                }else if(j==bombMap.length-1){//if it's the last row
+                    if(i==0){
+                        top=bombMap[j-1][i]+bombMap[j-1][i+1];
+                        right=bombMap[j-1][i+1]+bombMap[j][i+1];
+                    }else if(i==bombMap.length-1){
+                        top=bombMap[j-1][i]+bombMap[j-1][i-1];
+                        left=bombMap[j-1][i-1]+bombMap[j][i-1];
+                    }else{
+                        top=bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j-1][i-1];
+                        right=bombMap[j-1][i+1]+bombMap[j][i+1];
+                        left=bombMap[j-1][i-1]+bombMap[j][i-1];
+                    }
+                }else if(i==0){
+                    top=bombMap[j-1][i]+bombMap[j-1][i+1];
+                    bot=bombMap[j+1][i]+bombMap[j+1][i+1];
+                    right=bombMap[j-1][i+1]+bombMap[j][i+1]+bombMap[j+1][i+1];
+                }else if(i==bombMap.length-1){
+                    top=bombMap[j-1][i]+bombMap[j-1][i-1];
+                    bot=bombMap[j+1][i]+bombMap[j+1][i-1];
+                    left=bombMap[j-1][i-1]+bombMap[j][i-1]+bombMap[j+1][i-1];
+                }else{
+                    left=bombMap[j-1][i-1]+bombMap[j][i-1]+bombMap[j+1][i-1];
+                    right=bombMap[j-1][i+1]+bombMap[j][i+1]+bombMap[j+1][i+1];
+                    bot=bombMap[j+1][i]+bombMap[j+1][i+1]+bombMap[j+1][i-1];
+                    top=bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j-1][i-1];
+                }
+                board.getElementsByClassName("top")[t].innerHTML=top;
+                board.getElementsByClassName("bot")[t].innerHTML=bot;
+                board.getElementsByClassName("left")[t].innerHTML=left;
+                board.getElementsByClassName("right")[t].innerHTML=right;
+                top=0, left=0, right=0, bot=0;
+                t++;
+            }
+        }
+    }
 }
 document.getElementById("choice").addEventListener("change", function(event){
     let size=parseInt(document.getElementById("choice").value);
@@ -73,11 +139,11 @@ document.getElementById("gameFrame").addEventListener("click",function(event){
         clickedCell.getElementsByClassName("left")[0].classList.remove("invisible");
     }
     if(event.target.parentElement.classList.contains("bomb")){
-        // alert("you lost!");
-        document.getElementById("gameFrame").classList.add("underlay");
-        document.getElementById("lost").classList.remove("underlay");
-        document.getElementById("lost").classList.remove("invisible");
-        document.getElementById("lost").classList.add("d-flex");
+        gameOver("lost",0);
+        // document.getElementById("gameFrame").classList.add("underlay");
+        // document.getElementById("gameOver").classList.remove("underlay");
+        // document.getElementById("gameOver").classList.remove("invisible");
+        // document.getElementById("gameOver").classList.add("d-flex");
     }
 });
 document.getElementById("reload").addEventListener("click", function(){
