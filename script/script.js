@@ -14,9 +14,13 @@ function gameOver(result,score){
     document.getElementById("gameOver").classList.add("d-flex");
     if(result=="lost"){
         document.getElementById("resultLabel").innerHTML="YOU LOST!";
+        document.getElementById("resultLabel").classList.add("lost");
+        document.getElementById("scoreLabel").classList.add("lost");
         document.getElementById("scoreLabel").innerHTML="TOTAL SCORE: " + Math.floor(totalClick/totalCells*100) + "/100";
     }else{
         document.getElementById("resultLabel").innerHTML="YOU WON!";
+        document.getElementById("resultLabel").classList.add("won");
+        document.getElementById("scoreLabel").classList.add("won");
         document.getElementById("scoreLabel").innerHTML="TOTAL SCORE: 100/100";
     }
 }
@@ -120,10 +124,11 @@ document.getElementById("choice").addEventListener("change", function(event){
     }
 });
 //add the click eventlistener to the frame
-document.getElementById("gameFrame").addEventListener("click",function(event){
+document.getElementById("gameFrame").addEventListener("mousedown",function(event){
     clickedCell=event.target;
     clickedCell.classList.remove("stdBgr");
     clickedCell=event.target.parentElement;
+    clickedCell.classList.add("checkedBgr");
     // se è una cella senza bomba
     if(clickedCell.getElementsByClassName("radius")[0]!=undefined){
         if(clickedCell.getElementsByClassName("radius")[0].classList.contains("invisible")){
