@@ -6,7 +6,7 @@ function toggleSelect(){
 function randomNum(x){
     return Math.floor(Math.random()*x);
 }
-/**funzione che apre la pagina di vittoria o sconfitta e ritorna un numero */
+/**function that change the overlay form and gives the result+score */
 function gameOver(result,score){
     document.getElementById("gameFrame").classList.add("underlay");
     document.getElementById("gameOver").classList.remove("underlay");
@@ -20,6 +20,7 @@ function gameOver(result,score){
         document.getElementById("scoreLabel").innerHTML="TOTAL SCORE: 100/100";
     }
 }
+/** given a total numbers of cell returns an array populated with the non recorursive position of the 16 bombs */
 function populateBombs(totalCells){
     let bombsArray=[], temp;
     while (bombsArray.length<16){
@@ -54,91 +55,58 @@ function generateGameBoard(cells){
             bombMap[t]=[];
             j=0;
         }
-        //chanche of a bomb
+        //populate bombs array
         if(bombsArray.includes(i)){
             board.innerHTML+=`<div class="cell bomb"><div class="stdBgr"><p class="invisible">${i}</p></div></div>`;
-            // board.innerHTML+=`<div class="cell d-flex"><div class="stdBgr"></div><p class="left invisible">ciao</p><div class="center invisible d-flex"><p class="top">ciao</p><p class="bot">ciao</p></div><p class="right invisible">ciao</p></div>`;
             bombMap[t][j]=1;//populate matrix with mine
         }else{
-            // board.innerHTML+=`<div class="cell d-flex"><div class="stdBgr"><p class="invisible">${i}</p></div></div>`;
-            let top=0, bot=0, left=0, right=0;
             board.innerHTML+=`<div class="cell d-flex"><div class="stdBgr"></div><p class="radius invisible"></p></div></div>`;
             bombMap[t][j]=0;//populate matrix with empty
         }
         j++;
     }
-    console.log("board: "+bombMap);
-    console.log(bombMap.length);
+    // console.log("board: "+bombMap);
+    // console.log(bombMap.length);
     t=0;
-    let top=0, bot=0, left=0, right=0;
     let sum = 0;
-    //populate the bombs around
+    //populate the bombs around saved uin <p class="radius">
     for(j=0;j<bombMap.length;j++){//*cycle rows */
         for(let i=0;i<bombMap.length;i++){/*cycle columns */
             if(bombMap[j][i]!=1){
                 if(j==0){//if it's the starting row
                     if(i==0){
-                        // bot=bombMap[j+1][i]+bombMap[j+1][i+1];
-                        // right=bombMap[j+1][i+1]+bombMap[j][i+1];
                         sum=bombMap[j+1][i]+bombMap[j+1][i+1]+bombMap[j][i+1];
                     }else if(i==bombMap.length-1){
-                        // bot=bombMap[j+1][i]+bombMap[j+1][i-1];
-                        // left=bombMap[j+1][i-1]+bombMap[j][i-1];
                         sum=bombMap[j+1][i-1]+bombMap[j][i-1]+bombMap[j+1][i];
                     }else{
-                        // bot=bombMap[j+1][i]+bombMap[j+1][i+1]+bombMap[j+1][i-1];
-                        // right=bombMap[j+1][i+1]+bombMap[j][i+1];
-                        // left=bombMap[j+1][i-1]+bombMap[j][i-1];
                         sum=bombMap[j+1][i]+bombMap[j+1][i+1]+bombMap[j+1][i-1]+bombMap[j][i-1]+bombMap[j][i+1];
                     }
                 }else if(j==bombMap.length-1){//if it's the last row
                     if(i==0){
-                        // top=bombMap[j-1][i]+bombMap[j-1][i+1];
-                        // right=bombMap[j-1][i+1]+bombMap[j][i+1];
                         sum=bombMap[j][i+1]+bombMap[j-1][i]+bombMap[j-1][i+1];
                     }else if(i==bombMap.length-1){
-                        // top=bombMap[j-1][i]+bombMap[j-1][i-1];
-                        // left=bombMap[j-1][i-1]+bombMap[j][i-1];
                         sum=bombMap[j][i-1]+bombMap[j-1][i]+bombMap[j-1][i-1];
                     }else{
-                        // top=bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j-1][i-1];
-                        // right=bombMap[j-1][i+1]+bombMap[j][i+1];
-                        // left=bombMap[j-1][i-1]+bombMap[j][i-1];
                         sum=bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j][i+1]+bombMap[j-1][i-1]+bombMap[j][i-1];
                     }
                 }else if(i==0){
-                    // top=bombMap[j-1][i]+bombMap[j-1][i+1];
-                    // bot=bombMap[j+1][i]+bombMap[j+1][i+1];
-                    // right=bombMap[j-1][i+1]+bombMap[j][i+1]+bombMap[j+1][i+1];
                     sum=bombMap[j][i+1]+bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j+1][i]+bombMap[j+1][i+1];
                 }else if(i==bombMap.length-1){
-                    // top=bombMap[j-1][i]+bombMap[j-1][i-1];
-                    // bot=bombMap[j+1][i]+bombMap[j+1][i-1];
-                    // left=bombMap[j-1][i-1]+bombMap[j][i-1]+bombMap[j+1][i-1];
                     sum=bombMap[j-1][i-1]+bombMap[j][i-1]+bombMap[j+1][i-1]+bombMap[j+1][i]+bombMap[j-1][i];
                 }else{
-                    // left=bombMap[j-1][i-1]+bombMap[j][i-1]+bombMap[j+1][i-1];
-                    // right=bombMap[j-1][i+1]+bombMap[j][i+1]+bombMap[j+1][i+1];
-                    // bot=bombMap[j+1][i]+bombMap[j+1][i+1]+bombMap[j+1][i-1];
-                    // top=bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j-1][i-1];
                     sum=bombMap[j][i-1]+bombMap[j][i+1]+bombMap[j+1][i]+bombMap[j+1][i+1]+bombMap[j+1][i-1]+bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j-1][i-1];
                 }
                 if(sum!=0){
                     board.getElementsByClassName("radius")[t].innerHTML=sum;
                     sum=0;
                 }
-                // board.getElementsByClassName("top")[t].innerHTML=top;
-                // board.getElementsByClassName("bot")[t].innerHTML=bot;
-                // board.getElementsByClassName("left")[t].innerHTML=left;
-                // board.getElementsByClassName("right")[t].innerHTML=right;
-                // top=0, left=0, right=0, bot=0;
                 t++;
             }
         }
     }
 }
-var totalClick=0;
-var totalCells=0;
+var totalClick=0;//clicks counter
+var totalCells=0;//total matrix cells cout even obtain with bombmap.length^2
 var bombMap=[];//global matrix with the position of the cells empty and mined
 document.getElementById("choice").addEventListener("change", function(event){
     let size=parseInt(document.getElementById("choice").value);
@@ -162,9 +130,6 @@ document.getElementById("gameFrame").addEventListener("click",function(event){
             clickedCell.getElementsByClassName("radius")[0].classList.remove("invisible");
             totalClick++;
             console.log(totalClick);
-            // clickedCell.getElementsByClassName("center")[0].classList.remove("invisible");
-            // clickedCell.getElementsByClassName("right")[0].classList.remove("invisible");
-            // clickedCell.getElementsByClassName("left")[0].classList.remove("invisible");
             if(totalClick==totalCells-17){
                 gameOver("won",totalClick);
             }
@@ -172,10 +137,6 @@ document.getElementById("gameFrame").addEventListener("click",function(event){
     }
     if(event.target.parentElement.classList.contains("bomb")){
         gameOver("lost",totalClick);
-        // document.getElementById("gameFrame").classList.add("underlay");
-        // document.getElementById("gameOver").classList.remove("underlay");
-        // document.getElementById("gameOver").classList.remove("invisible");
-        // document.getElementById("gameOver").classList.add("d-flex");
     }
 });
 document.getElementById("reload").addEventListener("click", function(){
