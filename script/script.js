@@ -2,13 +2,9 @@
 function toggleSelect(){
     document.getElementById("choice").parentElement.classList.toggle("invisible");
 }
-/**given a percentage return with the same probability true or false */
-function perc(x){
-    if(Math.random()*100<x){
-        return true;
-    }else{
-        return false;
-    }
+/**returns a random numner from 0 to x, x not included */
+function randomNum(x){
+    return Math.floor(Math.random()*x);
 }
 /**funzione che apre la pagina di vittoria o sconfitta e ritorna un numero */
 function gameOver(result,score){
@@ -18,16 +14,27 @@ function gameOver(result,score){
     document.getElementById("gameOver").classList.add("d-flex");
     if(result=="lost"){
         document.getElementById("resultLabel").innerHTML="YOU LOST!";
-        document.getElementById("scoreLabel").innerHTML="SCORE: 0";
+        document.getElementById("scoreLabel").innerHTML="SCORE: " + Math.floor(totalClick/totalCells*100) + "/100";
     }else{
         document.getElementById("resultLabel").innerHTML="YOU WON!";
-        document.getElementById("scoreLabel").innerHTML="SCORE: 100";
+        document.getElementById("scoreLabel").innerHTML="SCORE: 100/100";
     }
 }
-/** funzione che dati il numero di celle crea una griglia con dimensione impostata dalle variabili css 
- */
-var bombMap=[];//global matrix with the position of the cells empty and mined
+function populateBombs(totalCells){
+    let bombsArray=[], temp;
+    while (bombsArray.length<16){
+        temp=randomNum(totalCells);
+        console.log(bombsArray);
+        if(!bombsArray.includes(temp)){
+           bombsArray.push(temp);
+        }
+    }
+    return bombsArray;
+}
+/** funzione che dati il numero di celle crea una griglia con dimensione impostata dalle variabili css */
 function generateGameBoard(cells){
+    totalCells=cells*cells;
+    var bombsArray = populateBombs(totalCells);
     var board=document.getElementById("gameFrame");
     var root = document.documentElement;
     board.innerHTML="";
@@ -48,7 +55,7 @@ function generateGameBoard(cells){
             j=0;
         }
         //chanche of a bomb
-        if(perc(10)){
+        if(bombsArray.includes(i)){
             board.innerHTML+=`<div class="cell bomb"><div class="stdBgr"><p class="invisible">${i}</p></div></div>`;
             // board.innerHTML+=`<div class="cell d-flex"><div class="stdBgr"></div><p class="left invisible">ciao</p><div class="center invisible d-flex"><p class="top">ciao</p><p class="bot">ciao</p></div><p class="right invisible">ciao</p></div>`;
             bombMap[t][j]=1;//populate matrix with mine
@@ -116,6 +123,9 @@ function generateGameBoard(cells){
         }
     }
 }
+var totalClick=0;
+var totalCells=0;
+var bombMap=[];//global matrix with the position of the cells empty and mined
 document.getElementById("choice").addEventListener("change", function(event){
     let size=parseInt(document.getElementById("choice").value);
     if(!isNaN(size)){
@@ -134,12 +144,18 @@ document.getElementById("gameFrame").addEventListener("click",function(event){
     clickedCell=event.target.parentElement;
     // se è una cella senza bomba
     if(clickedCell.getElementsByClassName("center")[0]!=undefined){
-        clickedCell.getElementsByClassName("center")[0].classList.remove("invisible");
-        clickedCell.getElementsByClassName("right")[0].classList.remove("invisible");
-        clickedCell.getElementsByClassName("left")[0].classList.remove("invisible");
+        if(clickedCell.getElementsByClassName("center")[0].classList.contains("invisible")){
+            clickedCell.getElementsByClassName("center")[0].classList.remove("invisible");
+            clickedCell.getElementsByClassName("right")[0].classList.remove("invisible");
+            clickedCell.getElementsByClassName("left")[0].classList.remove("invisible");
+            totalClick++;
+            if(totalClick==totalCells-16){
+                gameOver("won",totalClick);
+            }
+        }
     }
     if(event.target.parentElement.classList.contains("bomb")){
-        gameOver("lost",0);
+        gameOver("lost",totalClick);
         // document.getElementById("gameFrame").classList.add("underlay");
         // document.getElementById("gameOver").classList.remove("underlay");
         // document.getElementById("gameOver").classList.remove("invisible");
