@@ -14,10 +14,10 @@ function gameOver(result,score){
     document.getElementById("gameOver").classList.add("d-flex");
     if(result=="lost"){
         document.getElementById("resultLabel").innerHTML="YOU LOST!";
-        document.getElementById("scoreLabel").innerHTML="SCORE: " + Math.floor(totalClick/totalCells*100) + "/100";
+        document.getElementById("scoreLabel").innerHTML="TOTAL SCORE: " + Math.floor(totalClick/totalCells*100) + "/100";
     }else{
         document.getElementById("resultLabel").innerHTML="YOU WON!";
-        document.getElementById("scoreLabel").innerHTML="SCORE: 100/100";
+        document.getElementById("scoreLabel").innerHTML="TOTAL SCORE: 100/100";
     }
 }
 function populateBombs(totalCells){
@@ -62,7 +62,7 @@ function generateGameBoard(cells){
         }else{
             // board.innerHTML+=`<div class="cell d-flex"><div class="stdBgr"><p class="invisible">${i}</p></div></div>`;
             let top=0, bot=0, left=0, right=0;
-            board.innerHTML+=`<div class="cell d-flex"><div class="stdBgr"></div><p class="left invisible">ciao</p><div class="center invisible d-flex"><p class="top">ciao</p><p class="bot">ciao</p></div><p class="right invisible">ciao</p></div>`;
+            board.innerHTML+=`<div class="cell d-flex"><div class="stdBgr"></div><p class="radius invisible"></p></div></div>`;
             bombMap[t][j]=0;//populate matrix with empty
         }
         j++;
@@ -71,53 +71,67 @@ function generateGameBoard(cells){
     console.log(bombMap.length);
     t=0;
     let top=0, bot=0, left=0, right=0;
+    let sum = 0;
     //populate the bombs around
     for(j=0;j<bombMap.length;j++){//*cycle rows */
         for(let i=0;i<bombMap.length;i++){/*cycle columns */
             if(bombMap[j][i]!=1){
                 if(j==0){//if it's the starting row
                     if(i==0){
-                        bot=bombMap[j+1][i]+bombMap[j+1][i+1];
-                        right=bombMap[j+1][i+1]+bombMap[j][i+1];
+                        // bot=bombMap[j+1][i]+bombMap[j+1][i+1];
+                        // right=bombMap[j+1][i+1]+bombMap[j][i+1];
+                        sum=bombMap[j+1][i]+bombMap[j+1][i+1]+bombMap[j][i+1];
                     }else if(i==bombMap.length-1){
-                        bot=bombMap[j+1][i]+bombMap[j+1][i-1];
-                        left=bombMap[j+1][i-1]+bombMap[j][i-1];
+                        // bot=bombMap[j+1][i]+bombMap[j+1][i-1];
+                        // left=bombMap[j+1][i-1]+bombMap[j][i-1];
+                        sum=bombMap[j+1][i-1]+bombMap[j][i-1]+bombMap[j+1][i];
                     }else{
-                        bot=bombMap[j+1][i]+bombMap[j+1][i+1]+bombMap[j+1][i-1];
-                        right=bombMap[j+1][i+1]+bombMap[j][i+1];
-                        left=bombMap[j+1][i-1]+bombMap[j][i-1];
+                        // bot=bombMap[j+1][i]+bombMap[j+1][i+1]+bombMap[j+1][i-1];
+                        // right=bombMap[j+1][i+1]+bombMap[j][i+1];
+                        // left=bombMap[j+1][i-1]+bombMap[j][i-1];
+                        sum=bombMap[j+1][i]+bombMap[j+1][i+1]+bombMap[j+1][i-1]+bombMap[j][i-1]+bombMap[j][i+1];
                     }
                 }else if(j==bombMap.length-1){//if it's the last row
                     if(i==0){
-                        top=bombMap[j-1][i]+bombMap[j-1][i+1];
-                        right=bombMap[j-1][i+1]+bombMap[j][i+1];
+                        // top=bombMap[j-1][i]+bombMap[j-1][i+1];
+                        // right=bombMap[j-1][i+1]+bombMap[j][i+1];
+                        sum=bombMap[j][i+1]+bombMap[j-1][i]+bombMap[j-1][i+1];
                     }else if(i==bombMap.length-1){
-                        top=bombMap[j-1][i]+bombMap[j-1][i-1];
-                        left=bombMap[j-1][i-1]+bombMap[j][i-1];
+                        // top=bombMap[j-1][i]+bombMap[j-1][i-1];
+                        // left=bombMap[j-1][i-1]+bombMap[j][i-1];
+                        sum=bombMap[j][i-1]+bombMap[j-1][i]+bombMap[j-1][i-1];
                     }else{
-                        top=bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j-1][i-1];
-                        right=bombMap[j-1][i+1]+bombMap[j][i+1];
-                        left=bombMap[j-1][i-1]+bombMap[j][i-1];
+                        // top=bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j-1][i-1];
+                        // right=bombMap[j-1][i+1]+bombMap[j][i+1];
+                        // left=bombMap[j-1][i-1]+bombMap[j][i-1];
+                        sum=bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j][i+1]+bombMap[j-1][i-1]+bombMap[j][i-1];
                     }
                 }else if(i==0){
-                    top=bombMap[j-1][i]+bombMap[j-1][i+1];
-                    bot=bombMap[j+1][i]+bombMap[j+1][i+1];
-                    right=bombMap[j-1][i+1]+bombMap[j][i+1]+bombMap[j+1][i+1];
+                    // top=bombMap[j-1][i]+bombMap[j-1][i+1];
+                    // bot=bombMap[j+1][i]+bombMap[j+1][i+1];
+                    // right=bombMap[j-1][i+1]+bombMap[j][i+1]+bombMap[j+1][i+1];
+                    sum=bombMap[j][i+1]+bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j+1][i]+bombMap[j+1][i+1];
                 }else if(i==bombMap.length-1){
-                    top=bombMap[j-1][i]+bombMap[j-1][i-1];
-                    bot=bombMap[j+1][i]+bombMap[j+1][i-1];
-                    left=bombMap[j-1][i-1]+bombMap[j][i-1]+bombMap[j+1][i-1];
+                    // top=bombMap[j-1][i]+bombMap[j-1][i-1];
+                    // bot=bombMap[j+1][i]+bombMap[j+1][i-1];
+                    // left=bombMap[j-1][i-1]+bombMap[j][i-1]+bombMap[j+1][i-1];
+                    sum=bombMap[j-1][i-1]+bombMap[j][i-1]+bombMap[j+1][i-1]+bombMap[j+1][i]+bombMap[j-1][i];
                 }else{
-                    left=bombMap[j-1][i-1]+bombMap[j][i-1]+bombMap[j+1][i-1];
-                    right=bombMap[j-1][i+1]+bombMap[j][i+1]+bombMap[j+1][i+1];
-                    bot=bombMap[j+1][i]+bombMap[j+1][i+1]+bombMap[j+1][i-1];
-                    top=bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j-1][i-1];
+                    // left=bombMap[j-1][i-1]+bombMap[j][i-1]+bombMap[j+1][i-1];
+                    // right=bombMap[j-1][i+1]+bombMap[j][i+1]+bombMap[j+1][i+1];
+                    // bot=bombMap[j+1][i]+bombMap[j+1][i+1]+bombMap[j+1][i-1];
+                    // top=bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j-1][i-1];
+                    sum=bombMap[j][i-1]+bombMap[j][i+1]+bombMap[j+1][i]+bombMap[j+1][i+1]+bombMap[j+1][i-1]+bombMap[j-1][i]+bombMap[j-1][i+1]+bombMap[j-1][i-1];
                 }
-                board.getElementsByClassName("top")[t].innerHTML=top;
-                board.getElementsByClassName("bot")[t].innerHTML=bot;
-                board.getElementsByClassName("left")[t].innerHTML=left;
-                board.getElementsByClassName("right")[t].innerHTML=right;
-                top=0, left=0, right=0, bot=0;
+                if(sum!=0){
+                    board.getElementsByClassName("radius")[t].innerHTML=sum;
+                    sum=0;
+                }
+                // board.getElementsByClassName("top")[t].innerHTML=top;
+                // board.getElementsByClassName("bot")[t].innerHTML=bot;
+                // board.getElementsByClassName("left")[t].innerHTML=left;
+                // board.getElementsByClassName("right")[t].innerHTML=right;
+                // top=0, left=0, right=0, bot=0;
                 t++;
             }
         }
@@ -143,13 +157,15 @@ document.getElementById("gameFrame").addEventListener("click",function(event){
     clickedCell.classList.remove("stdBgr");
     clickedCell=event.target.parentElement;
     // se è una cella senza bomba
-    if(clickedCell.getElementsByClassName("center")[0]!=undefined){
-        if(clickedCell.getElementsByClassName("center")[0].classList.contains("invisible")){
-            clickedCell.getElementsByClassName("center")[0].classList.remove("invisible");
-            clickedCell.getElementsByClassName("right")[0].classList.remove("invisible");
-            clickedCell.getElementsByClassName("left")[0].classList.remove("invisible");
+    if(clickedCell.getElementsByClassName("radius")[0]!=undefined){
+        if(clickedCell.getElementsByClassName("radius")[0].classList.contains("invisible")){
+            clickedCell.getElementsByClassName("radius")[0].classList.remove("invisible");
             totalClick++;
-            if(totalClick==totalCells-16){
+            console.log(totalClick);
+            // clickedCell.getElementsByClassName("center")[0].classList.remove("invisible");
+            // clickedCell.getElementsByClassName("right")[0].classList.remove("invisible");
+            // clickedCell.getElementsByClassName("left")[0].classList.remove("invisible");
+            if(totalClick==totalCells-17){
                 gameOver("won",totalClick);
             }
         }

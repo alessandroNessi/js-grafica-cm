@@ -49,7 +49,7 @@ h1, main{
     height: var(--cellWidth);
 }
 /*cells mine data align*/
-.center{
+/* .center{
     width: 50%;
     height: 100%;
     flex-direction: column;
@@ -67,6 +67,11 @@ h1, main{
     width: 25%;
     text-align: end;
     align-self:center;
+} */
+.radius{
+    justify-self: center;
+    align-self: center;
+    font-size: 30px;
 }
 /*end data align*/
 .invisible{
